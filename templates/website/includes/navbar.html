@@ -1,0 +1,47 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="{% url 'dashboard' %}">E-BUY</a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                {% if request.user.is_authenticated %}
+                    <!-- Cart dropdown -->
+                    <li class="nav-item dropdown me-3">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarCart" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            🛒 Cart 
+                            <span class="badge bg-light text-dark">{{ request.user.cart.total_items|default:0 }}</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end p-2" aria-labelledby="navbarCart" style="min-width: 250px;">
+                            {% if request.user.cart.items.exists %}
+                                {% for item in request.user.cart.items.all %}
+                                    <div class="d-flex justify-content-between mb-1">
+                                        <span>{{ item.product.name }}</span>
+                                        <span class="badge bg-secondary">{{ item.quantity }}</span>
+                                    </div>
+                                {% endfor %}
+                                <div class="dropdown-divider"></div>
+                                <a class="btn btn-sm btn-primary w-100" href="{% url 'cart_view' %}">View Cart</a>
+                            {% else %}
+                                <span class="text-muted">Cart is empty</span>
+                            {% endif %}
+                        </ul>
+                    </li>
+
+                    <!-- Logout button -->
+                    <li class="nav-item">
+                        <a class="nav-link text-danger" href="{% url 'logout' %}">Logout</a>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'login' %}">Login</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>

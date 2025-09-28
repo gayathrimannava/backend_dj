@@ -1,0 +1,12 @@
+{% extends 'website/base.html' %}
+
+{% block title %}Logged Out{% endblock %}
+
+{% block content %}
+<div class="text-center mt-5">
+    <h1 class="mb-4">You have been logged out from BOOKNEST.</h1>
+    <p class="lead">Thank you for visiting.</p>
+    <a href="{% url 'login' %}" class="btn btn-primary mt-3">Login Again</a>
+    <a href="{% url 'home' %}" class="btn btn-secondary mt-3">Go to Home</a>
+</div>
+{% endblock %}

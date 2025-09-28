@@ -1,0 +1,21 @@
+{% extends 'website/base.html' %}
+
+{% block title %}Confirm Delete{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6 mt-5">
+        <div class="card p-5 shadow-lg border-danger">
+            <h2 class="card-title text-center text-danger mb-4">Confirm Deletion</h2>
+            <p class="text-center lead">Are you sure you want to delete the product: <strong>"{{ object.name }}"</strong>?</p>
+            <p class="text-center text-muted">This action cannot be undone.</p>
+            
+            <form method="post">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger w-100 mt-3">Yes, Delete It</button>
+                <a href="{% url 'product_list' %}" class="btn btn-secondary w-100 mt-2">Cancel</a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,44 @@
+{% extends 'website/base.html' %}
+
+
+{% block title %}User List{% endblock %}
+
+{% block content %}
+<h1 class="mt-4 mb-4">Users</h1>
+<hr>
+
+{% if users %}
+<div class="table-responsive">
+    <table class="table table-striped table-hover align-middle">
+        <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Status</th>
+                <th>Date Joined</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+            <tr>
+                <td>{{ user.id }}</td>
+                <td>{{ user.username }}</td>
+                <td>{{ user.email }}</td>
+                <td>
+                    <span class="badge {% if user.is_superuser %}bg-danger{% elif user.is_staff %}bg-warning text-dark{% else %}bg-success{% endif %}">
+                        {% if user.is_superuser %}Admin{% elif user.is_staff %}Staff{% else %}Active User{% endif %}
+                    </span>
+                </td>
+                <td>{{ user.date_joined|date:"M d, Y" }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<div class="alert alert-info mt-3">No users found.</div>
+{% endif %}
+{% endblock %}
+
+

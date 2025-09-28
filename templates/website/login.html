@@ -1,0 +1,40 @@
+{% extends 'website/base.html' %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-5 mt-5">
+        <div class="card p-4 shadow-lg">
+            <h2 class="text-center mb-4">Sign In to E-BUY</h2>
+            
+            {% if error %}
+            <div class="alert alert-danger" role="alert">{{ error }}</div>
+            {% endif %}
+            
+            <form method="post" action="{% url 'login' %}">
+                
+                {# 🚨 FIX: ADD THE CSRF TOKEN HERE 🚨 #}
+                {% csrf_token %} 
+                
+                <div class="mb-3">
+                    <label for="id_username" class="form-label">Username</label>
+                    <input type="text" class="form-control" id="id_username" name="username" required>
+                </div>
+                <div class="mb-3">
+                    <label for="id_password" class="form-label">Password</label>
+                    <input type="password" class="form-control" id="id_password" name="password" required>
+                </div>
+                <button type="submit" class="btn btn-primary w-100 mt-3">Log In</button>
+            </form>
+            
+            <p class="text-center mt-3">
+                Don't have an account? <a href="{% url 'signup' %}">Sign Up</a>
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+
+ 

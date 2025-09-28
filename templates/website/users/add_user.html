@@ -1,0 +1,16 @@
+{% extends 'website/base.html' %}
+
+
+{% block title %}Add New User{% endblock %}
+
+{% block content %}
+<h1 class="mt-4 mb-4">Add New User</h1>
+<hr>
+
+<form method="post" action="">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-success mt-3">Add User</button>
+</form>
+{% endblock %}
+
