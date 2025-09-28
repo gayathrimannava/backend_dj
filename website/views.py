@@ -1,9 +1,12 @@
 
+import json
+from django.forms import model_to_dict
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import messages
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout, get_user_model
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
 
 # REST Framework imports
 from rest_framework.views import APIView
@@ -85,15 +88,57 @@ def signup(request):
         form = CustomUserCreationForm()
     return render(request, 'website/signup.html', {'form': form})
 
-def api_product_list(request):
-    products = Product.objects.all().values('id', 'name', 'price', 'description')
+def api_product_list(request, id=None):
+    if id is not None:
+        product = get_object_or_404(Product, pk=id)
+        data = model_to_dict(product, fields=['id', 'name', 'price', 'description', 'stock'])
+        return JsonResponse(data)
+    products = Product.objects.all().values('id', 'name', 'price', 'description', 'stock')
     return JsonResponse(list(products), safe=False)
 
+def api_product(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        product = Product(
+            name=data.get('name'),
+            price=data.get('price'),
+            description=data.get('description'),
+            stock=data.get('stock', 0)
+        )
+        product.save()
+        return JsonResponse({
+            'id': product.id,
+            'name': product.name,
+            'price': product.price,
+            'description': product.description,
+            'stock': product.stock
+        })
+    elif request.method == 'PUT':
+        data = json.loads(request.body)
+        print(data)
+        id=data.get('id')
+        if id==None:
+            return JsonResponse({'error': 'Invalid method or missing id'}, status=405)
+        product = get_object_or_404(Product, id=int(id))
+        product.name = data.get('name', product.name)
+        product.price = data.get('price', product.price)
+        product.description = data.get('description', product.description)
+        product.stock = data.get('stock', product.stock)
+        product.save()
+        return JsonResponse({
+            'id': product.id,
+            'name': product.name,
+            'price': product.price,
+            'description': product.description,
+            'stock': product.stock
+        })
+    else:
+        return JsonResponse({'error': 'Invalid method or missing id'}, status=405)
 # -------------------------
 # Dashboard / CRUD Views
 # -------------------------
 @login_required
-def product_list(request):
+def product_list(request): 
     products = Product.objects.all().order_by('id')
     return render(request, 'website/products/product_list.html', {'products': products})
 
@@ -196,7 +241,8 @@ def cart_view(request):
 # Remove from Cart
 @login_required
 def remove_from_cart(request, item_id):
-    item = get_object_or_404(CartItem, id=item_id, cart__user=request.user)
+    print(item_id)
+    item = get_object_or_404(CartItem, product_id=item_id, cart__user=request.user)
     item.delete()
     return redirect('cart_view')
 

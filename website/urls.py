@@ -28,5 +28,7 @@ urlpatterns = [
 
     # ----------------- API -----------------
     path('api/login/', views.SimpleLoginView.as_view(), name='api_login'),
+    path('api/products/<int:id>', views.api_product_list, name='api_product_list'),
     path('api/products/', views.api_product_list, name='api_product_list'),
+    path('api/product/',views.api_product, name='api_admin_prodcut'),
 ]

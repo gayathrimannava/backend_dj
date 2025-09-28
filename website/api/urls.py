@@ -11,4 +11,5 @@ urlpatterns = [
     # ---------------- Products ----------------
     path('products/', ProductListCreateView.as_view(), name='product_list_create'),          # GET: list, POST: add
     path('products/<int:pk>/', ProductRetrieveUpdateDeleteView.as_view(), name='product_detail'),  # GET/PUT/DELETE single product
+    path('ping',ProductRetrieveUpdateDeleteView.as_view(),name="ping"),
 ]

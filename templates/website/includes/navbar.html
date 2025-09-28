@@ -19,9 +19,10 @@
                         <ul class="dropdown-menu dropdown-menu-end p-2" aria-labelledby="navbarCart" style="min-width: 250px;">
                             {% if request.user.cart.items.exists %}
                                 {% for item in request.user.cart.items.all %}
-                                    <div class="d-flex justify-content-between mb-1">
+                                    <div class="d-grid justify-content-evenly mb-1" style= "grid-auto-flow: column;grid-template-columns: 50% 10% 30%; gap:5px">
                                         <span>{{ item.product.name }}</span>
                                         <span class="badge bg-secondary">{{ item.quantity }}</span>
+                                        <a class="badge bg-secondary" href="{% url 'remove_from_cart' item.product.id %}">Remove</a>
                                     </div>
                                 {% endfor %}
                                 <div class="dropdown-divider"></div>

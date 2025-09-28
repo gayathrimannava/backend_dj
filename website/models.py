@@ -24,6 +24,7 @@ class Profile(models.Model):
 # Product model
 # -------------------------------
 class Product(models.Model):
+    id=models.IntegerField(auto_created=True,primary_key=True)
     name = models.CharField(max_length=100)
     price = models.DecimalField(max_digits=8, decimal_places=2)
     description = models.TextField(blank=True, null=True)
